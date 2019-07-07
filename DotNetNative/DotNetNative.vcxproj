@@ -145,9 +145,27 @@
   <ItemGroup>
     <ClInclude Include="Memory.h" />
     <ClInclude Include="MemoryUtil.h" />
+    <ClInclude Include="System\BitConverter.h" />
+    <ClInclude Include="System\Buffers\Binary\BinaryPrimitives.h" />
+    <ClInclude Include="System\Char.h" />
+    <ClInclude Include="System\CharEnumerator.h" />
+    <ClInclude Include="System\CharUnicodeInfo.h" />
+    <ClInclude Include="System\Exception.h" />
+    <ClInclude Include="System\IEnumerable.h" />
+    <ClInclude Include="System\IEnumerator.h" />
+    <ClInclude Include="System\Object.h" />
+    <ClInclude Include="System\String.h" />
+    <ClInclude Include="System\UnicodeCategory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="System\Char.cpp" />
+    <ClCompile Include="System\CharEnumerator.cpp" />
+    <ClCompile Include="System\CharUnicodeInfo.cpp" />
+    <ClCompile Include="System\CharUnicodeInfoData.cpp" />
+    <ClCompile Include="System\Exception.cpp" />
+    <ClCompile Include="System\Object.cpp" />
+    <ClCompile Include="System\String.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

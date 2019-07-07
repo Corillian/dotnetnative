@@ -170,6 +170,12 @@ namespace DotNetNative
         }
     };
 
+#ifdef _DEBUG
+#define DNN_Allocator(type) DotNetNative::Allocator<type>(__FILE__, __LINE__)
+#else
+#define DNN_Allocator(type) DotNetNative::Allocator<type>()
+#endif
+
     template <typename T, typename U>
     inline bool operator == (const Allocator<T>&, const Allocator<U>&)
     {

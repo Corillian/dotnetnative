@@ -8,12 +8,72 @@
     <Filter Include="System">
       <UniqueIdentifier>{aecc4c00-8756-47fe-80fd-ffbe405c11b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Buffers">
+      <UniqueIdentifier>{9ac2cbbd-ba48-4d28-8204-81b247470dd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Buffers\Binary">
+      <UniqueIdentifier>{6160663f-24fa-4377-84c0-a696385132f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.h" />
     <ClInclude Include="MemoryUtil.h" />
+    <ClInclude Include="System\Object.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\String.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Char.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\UnicodeCategory.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Exception.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\IEnumerable.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\IEnumerator.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\CharEnumerator.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\CharUnicodeInfo.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\BitConverter.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Buffers\Binary\BinaryPrimitives.h">
+      <Filter>System\Buffers\Binary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="System\Object.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Char.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\String.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Exception.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\CharEnumerator.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\CharUnicodeInfo.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\CharUnicodeInfoData.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
