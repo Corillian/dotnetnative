@@ -21,6 +21,12 @@
     <ClCompile Include="MemoryTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StringBuilderTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

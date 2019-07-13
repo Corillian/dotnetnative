@@ -1,21 +1,20 @@
 #ifndef _DOTNETNATIVE_SYSTEM_CHAR_H_
 #define _DOTNETNATIVE_SYSTEM_CHAR_H_
 
+#include "../GlobalDefs.h"
+#include "IEquitable.h"
+#include "IComparable.h"
 #include "UnicodeCategory.h"
 #include "Object.h"
-
-#include <cstdint>
 
 namespace DotNetNative
 {
     namespace System
     {
-        typedef int8_t asciichar;
-        typedef uint8_t utf8char;
-        typedef uint16_t utf16char;
-        typedef uint32_t utf32char;
-
-        class Char : public Object
+        class Char
+            : public Object
+            , public IComparable<Char>
+            , public IEquitable<Char>
         {
         public:
             static constexpr utf16char MaxValue = 0xFFFF;
@@ -38,11 +37,11 @@ namespace DotNetNative
             constexpr Char(const char chr) : m_char(chr) {}
             virtual ~Char() {}
 
-            bool Equals(const Char &obj) const noexcept;
+            virtual bool Equals(const Char &obj) const noexcept override;
             virtual String ToString() override;
             virtual int GetHashCode() const override;
 
-            constexpr int CompareTo(const Char &chr) const noexcept { return m_char - chr.m_char; }
+            virtual int CompareTo(const Char &chr) const noexcept override { return m_char - chr.m_char; }
             constexpr int CompareTo(const utf16char chr) const noexcept { return m_char - chr; }
             constexpr operator utf16char() const noexcept { return m_char; }
 

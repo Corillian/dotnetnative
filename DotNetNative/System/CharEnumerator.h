@@ -27,7 +27,7 @@ namespace DotNetNative
             virtual ~CharEnumerator() {}
 
             CharEnumerator& operator=(const CharEnumerator &copy);
-            CharEnumerator& operator=(CharEnumerator &mov) noexcept;
+            CharEnumerator& operator=(CharEnumerator &&mov) noexcept;
 
             //
             // Summary:

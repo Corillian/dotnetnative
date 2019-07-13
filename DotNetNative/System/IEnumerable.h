@@ -26,7 +26,7 @@ namespace DotNetNative
         protected:
             IEnumerable() = default;
             IEnumerable(const IEnumerable<T> &copy) = default;
-            IEnumerable(IEnumerable<T> &&mov) = default;
+            IEnumerable(IEnumerable<T> &&mov) noexcept = default;
 
         public:
             virtual ~IEnumerable() {}

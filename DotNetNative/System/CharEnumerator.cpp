@@ -54,7 +54,7 @@ namespace DotNetNative
             return *this;
         }
 
-        CharEnumerator& CharEnumerator::operator=(CharEnumerator &mov) noexcept
+        CharEnumerator& CharEnumerator::operator=(CharEnumerator &&mov) noexcept
         {
             if(this != &mov)
             {

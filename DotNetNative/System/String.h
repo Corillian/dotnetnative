@@ -3,6 +3,7 @@
 
 #include "Char.h"
 #include "IEnumerable.h"
+#include "Exception.h"
 
 namespace DotNetNative
 {
@@ -12,9 +13,14 @@ namespace DotNetNative
             : public Object
             , public IEnumerable<utf16char>
         {
+            friend class StringBuilder;
         private:
             shared_ptr<utf16char[]> m_string;
             int                     m_length;
+
+        private:
+            String(const shared_ptr<utf16char[]> &str, const int length);
+            String(shared_ptr<utf16char[]> &&str, const int length);
 
         public:
             String() noexcept;
@@ -32,6 +38,10 @@ namespace DotNetNative
             String& operator=(String &&mov) noexcept;
 
             utf16char operator[](const int index) const;
+            operator const utf16char*() const noexcept;
+
+            bool Equals(const String &obj) const noexcept;
+            virtual String ToString() override;
 
             //
             // Summary:
@@ -42,7 +52,16 @@ namespace DotNetNative
             virtual unique_ptr<IEnumerator<utf16char>> GetEnumerator() override;
 
             inline int Length() const noexcept { return m_length; }
+
+            friend bool operator==(const String &str1, const char *str2);
+            friend bool operator==(const String &str1, const utf16char *str2);
         };
+
+        bool operator==(const String &str1, const String &str2);
+        bool operator==(const char *str1, const String &str2);
+        bool operator==(const String &str1, const char *str2);
+        bool operator==(const utf16char *str1, const String &str2);
+        bool operator==(const String &str1, const utf16char *str2);
     }
 }
 

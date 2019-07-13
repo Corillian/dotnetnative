@@ -94,7 +94,7 @@ namespace DotNetNative
         /// </summary>
         static double InternalGetNumericValue(const int ch)
         {
-            assert(ch >= 0 && ch <= 0x10ffff, "ch is not in valid Unicode range.");
+            assert(ch >= 0 && ch <= 0x10ffff);
 
             // Get the level 2 item from the highest 12 bit (8 - 19) of ch.
             int index = ch >> 8;

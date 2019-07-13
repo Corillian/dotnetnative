@@ -11,6 +11,18 @@ namespace DotNetNative
         {
         }
 
+        String::String(const shared_ptr<utf16char[]> &str, const int length)
+            : m_string(str)
+            , m_length(length)
+        {
+        }
+
+        String::String(shared_ptr<utf16char[]> &&str, const int length)
+            : m_string(std::move(str))
+            , m_length(length)
+        {
+        }
+
         String::String(const utf16char *str)
             : m_length(0)
         {
@@ -192,6 +204,11 @@ namespace DotNetNative
             return *this;
         }
 
+        String::operator const utf16char*() const noexcept
+        {
+            return static_cast<const utf16char*>(m_string.get());
+        }
+
         utf16char String::operator[](const int index) const
         {
             if(index < 0 && index >= m_length)
@@ -205,6 +222,124 @@ namespace DotNetNative
         unique_ptr<IEnumerator<utf16char>> String::GetEnumerator()
         {
             return unique_ptr<IEnumerator<utf16char>>(DNN_New CharEnumerator(m_string, m_length));
+        }
+
+        bool String::Equals(const String &obj) const noexcept
+        {
+            if(this == &obj)
+            {
+                return true;
+            }
+
+            if(m_length != obj.m_length)
+            {
+                return false;
+            }
+
+            if(m_length == 0)
+            {
+                return true;
+            }
+
+            return memcmp(m_string.get(), obj.m_string.get(), sizeof(utf16char) * m_length) == 0;
+        }
+
+        String String::ToString()
+        {
+            return *this;
+        }
+
+        bool operator==(const String &str1, const String &str2)
+        {
+            return str1.Equals(str2);
+        }
+
+        bool operator==(const char *str1, const String &str2)
+        {
+            return str2 == str1;
+        }
+
+        bool operator==(const String &str1, const char *str2)
+        {
+            if(!str2 || !*str2)
+            {
+                return str1.Length() == 0;
+            }
+
+            if(str1.Length() == 0)
+            {
+                return false;
+            }
+
+            const utf16char *str1Ptr = str1.m_string.get();
+
+            while(true)
+            {
+                if(*str1Ptr == 0)
+                {
+                    return *str2 == 0;
+                }
+
+                if(*str2 == 0)
+                {
+                    return *str1Ptr == 0;
+                }
+
+                if(*str1Ptr != *str2)
+                {
+                    return false;
+                }
+
+                ++str1Ptr;
+                ++str2;
+            }
+
+            // This should be inaccessible
+            return true;
+        }
+
+        bool operator==(const utf16char *str1, const String &str2)
+        {
+            return str2 == str1;
+        }
+
+        bool operator==(const String &str1, const utf16char *str2)
+        {
+            if(!str2 || !*str2)
+            {
+                return str1.Length() == 0;
+            }
+
+            if(str1.Length() == 0)
+            {
+                return false;
+            }
+
+            const utf16char *str1Ptr = str1.m_string.get();
+
+            while(true)
+            {
+                if(*str1Ptr == 0)
+                {
+                    return *str2 == 0;
+                }
+
+                if(*str2 == 0)
+                {
+                    return *str1Ptr == 0;
+                }
+
+                if(*str1Ptr != *str2)
+                {
+                    return false;
+                }
+
+                ++str1Ptr;
+                ++str2;
+            }
+
+            // This should be inaccessible
+            return true;
         }
     }
 }

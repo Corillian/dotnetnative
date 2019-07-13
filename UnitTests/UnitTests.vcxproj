@@ -167,6 +167,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="MemoryTests.cpp" />
+    <ClCompile Include="StringBuilderTests.cpp" />
+    <ClCompile Include="StringTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

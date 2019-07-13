@@ -14,6 +14,15 @@
     <Filter Include="System\Buffers\Binary">
       <UniqueIdentifier>{6160663f-24fa-4377-84c0-a696385132f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Text">
+      <UniqueIdentifier>{6964f188-addc-4b87-9e58-61b7f0ae38ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Globalization">
+      <UniqueIdentifier>{43f2b405-d2f8-41eb-b92d-84c20815e3db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Collections">
+      <UniqueIdentifier>{83e1b32c-0f68-453a-8415-b1d020f29dc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.h" />
@@ -51,6 +60,52 @@
     <ClInclude Include="System\Buffers\Binary\BinaryPrimitives.h">
       <Filter>System\Buffers\Binary</Filter>
     </ClInclude>
+    <ClInclude Include="System\Text\UnicodeUtility.h">
+      <Filter>System\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalDefs.h" />
+    <ClInclude Include="System\IEquitable.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\IComparable.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ICollection.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Array.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\IReadOnlyCollection.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\IReadOnlyList.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\GenericEnumerator.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Byte.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Globalization\NumberStyles.h">
+      <Filter>System\Globalization</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Environment.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\StringBuilder.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\IReadOnlyDictionary.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\KeyValuePair.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\IDictionary.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp" />
@@ -75,5 +130,15 @@
     <ClCompile Include="System\CharUnicodeInfoData.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="System\Byte.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Environment.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\StringBuilder.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryUtil.cpp" />
   </ItemGroup>
 </Project>

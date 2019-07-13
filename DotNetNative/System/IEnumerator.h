@@ -21,7 +21,7 @@ namespace DotNetNative
         protected:
             IEnumerator() = default;
             IEnumerator(const IEnumerator<T> &copy) = default;
-            IEnumerator(IEnumerator<T> &&mov) = default;
+            IEnumerator(IEnumerator<T> &&mov) noexcept = default;
 
         public:
             virtual ~IEnumerator() {}
