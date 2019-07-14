@@ -62,18 +62,18 @@ namespace DotNetNative
         }
 
         template <>
-        String Object::ToString<utf16char*>(utf16char *&obj)
+        String Object::ToString<uint16_t*>(uint16_t *&obj)
         {
             if(obj)
             {
-                return String(obj);
+                throw NotImplementedException();
             }
 
             return String("null");
         }
 
         template <>
-        String Object::ToString<utf16char>(utf16char &obj)
+        String Object::ToString<uint16_t>(uint16_t &obj)
         {
             return String(&obj, 1);
         }
@@ -209,6 +209,23 @@ namespace DotNetNative
             if(obj)
             {
                 throw NotImplementedException();
+            }
+
+            return String("null");
+        }
+
+        template <>
+        String Object::ToString<bool>(bool &obj)
+        {
+            return obj ? String("True") : String("False");
+        }
+
+        template <>
+        String Object::ToString<bool*>(bool *&obj)
+        {
+            if(obj)
+            {
+                return *obj ? String("True") : String("False");
             }
 
             return String("null");

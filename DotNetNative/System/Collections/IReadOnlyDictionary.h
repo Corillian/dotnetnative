@@ -1,9 +1,9 @@
 #ifndef _DOTNETNATIVE_SYSTEM_COLLECTIONS_IREADONLYDICTIONARY_H_
 #define _DOTNETNATIVE_SYSTEM_COLLECTIONS_IREADONLYDICTIONARY_H_
 
-#include "../IReadOnlyCollection.h"
+#include "IReadOnlyCollection.h"
 #include "KeyValuePair.h"
-#include "../..//MemoryUtil.h"
+#include "../../MemoryUtil.h"
 
 namespace DotNetNative
 {
@@ -13,7 +13,7 @@ namespace DotNetNative
         {
             template <typename TKey, typename TValue>
             class IReadOnlyDictionary
-                : public IReadOnlyCollection<KeyValuePair<TKey, TValue>>
+                : public virtual IReadOnlyCollection<KeyValuePair<TKey, TValue>>
             {
             protected:
                 IReadOnlyDictionary() = default;

@@ -1,5 +1,5 @@
-#ifndef _DOTNETNATIVE_SYSTEM_IEQUITABLE_H_
-#define _DOTNETNATIVE_SYSTEM_IEQUITABLE_H_
+#ifndef _DOTNETNATIVE_SYSTEM_IEQUATABLE_H_
+#define _DOTNETNATIVE_SYSTEM_IEQUATABLE_H_
 
 namespace DotNetNative
 {
@@ -14,15 +14,15 @@ namespace DotNetNative
         //   T:
         //     The type of objects to compare.
         template <typename T>
-        class IEquitable
+        class IEquatable
         {
         protected:
-            IEquitable() = default;
-            IEquitable(const IEquitable<T> &copy) = default;
-            IEquitable(IEquitable<T> &&mov) noexcept = default;
+            IEquatable() = default;
+            IEquatable(const IEquatable<T> &copy) = default;
+            IEquatable(IEquatable<T> &&mov) noexcept = default;
 
         public:
-            virtual ~IEquitable() {}
+            virtual ~IEquatable() {}
 
             //
             // Summary:

@@ -42,12 +42,6 @@
     <ClInclude Include="System\Exception.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="System\IEnumerable.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\IEnumerator.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="System\CharEnumerator.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -64,25 +58,10 @@
       <Filter>System\Text</Filter>
     </ClInclude>
     <ClInclude Include="GlobalDefs.h" />
-    <ClInclude Include="System\IEquitable.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="System\IComparable.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="System\ICollection.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="System\Array.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\IReadOnlyCollection.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\IReadOnlyList.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\GenericEnumerator.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="System\Byte.h">
@@ -106,6 +85,37 @@
     <ClInclude Include="System\Collections\IDictionary.h">
       <Filter>System\Collections</Filter>
     </ClInclude>
+    <ClInclude Include="System\Collections\Dictionary.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\IEnumerable.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\IEnumerator.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\IReadOnlyCollection.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\IReadOnlyList.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\GenericEnumerator.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\ICollection.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\IEqualityComparer.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\EqualityComparer.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\IEquatable.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="xxhash.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp" />
@@ -140,5 +150,9 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="MemoryUtil.cpp" />
+    <ClCompile Include="System\Collections\EqualityComparer.cpp">
+      <Filter>System\Collections</Filter>
+    </ClCompile>
+    <ClCompile Include="xxhash.cpp" />
   </ItemGroup>
 </Project>

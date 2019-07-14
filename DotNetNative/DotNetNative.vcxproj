@@ -153,25 +153,29 @@
     <ClInclude Include="System\Char.h" />
     <ClInclude Include="System\CharEnumerator.h" />
     <ClInclude Include="System\CharUnicodeInfo.h" />
+    <ClInclude Include="System\Collections\Dictionary.h" />
+    <ClInclude Include="System\Collections\EqualityComparer.h" />
+    <ClInclude Include="System\Collections\GenericEnumerator.h" />
+    <ClInclude Include="System\Collections\ICollection.h" />
     <ClInclude Include="System\Collections\IDictionary.h" />
+    <ClInclude Include="System\Collections\IEnumerable.h" />
+    <ClInclude Include="System\Collections\IEnumerator.h" />
+    <ClInclude Include="System\Collections\IEqualityComparer.h" />
+    <ClInclude Include="System\Collections\IReadOnlyCollection.h" />
     <ClInclude Include="System\Collections\IReadOnlyDictionary.h" />
+    <ClInclude Include="System\Collections\IReadOnlyList.h" />
     <ClInclude Include="System\Collections\KeyValuePair.h" />
     <ClInclude Include="System\Environment.h" />
     <ClInclude Include="System\Exception.h" />
-    <ClInclude Include="System\GenericEnumerator.h" />
     <ClInclude Include="System\Globalization\NumberStyles.h" />
-    <ClInclude Include="System\ICollection.h" />
     <ClInclude Include="System\IComparable.h" />
-    <ClInclude Include="System\IEnumerable.h" />
-    <ClInclude Include="System\IEnumerator.h" />
-    <ClInclude Include="System\IEquitable.h" />
-    <ClInclude Include="System\IReadOnlyCollection.h" />
-    <ClInclude Include="System\IReadOnlyList.h" />
+    <ClInclude Include="System\IEquatable.h" />
     <ClInclude Include="System\Object.h" />
     <ClInclude Include="System\String.h" />
     <ClInclude Include="System\StringBuilder.h" />
     <ClInclude Include="System\Text\UnicodeUtility.h" />
     <ClInclude Include="System\UnicodeCategory.h" />
+    <ClInclude Include="xxhash.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp" />
@@ -181,11 +185,13 @@
     <ClCompile Include="System\CharEnumerator.cpp" />
     <ClCompile Include="System\CharUnicodeInfo.cpp" />
     <ClCompile Include="System\CharUnicodeInfoData.cpp" />
+    <ClCompile Include="System\Collections\EqualityComparer.cpp" />
     <ClCompile Include="System\Environment.cpp" />
     <ClCompile Include="System\Exception.cpp" />
     <ClCompile Include="System\Object.cpp" />
     <ClCompile Include="System\String.cpp" />
     <ClCompile Include="System\StringBuilder.cpp" />
+    <ClCompile Include="xxhash.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

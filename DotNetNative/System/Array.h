@@ -4,8 +4,8 @@
 #include "../MemoryUtil.h"
 #include "Object.h"
 #include "Exception.h"
-#include "IReadOnlyList.h"
-#include "GenericEnumerator.h"
+#include "Collections/IReadOnlyList.h"
+#include "Collections/GenericEnumerator.h"
 
 namespace DotNetNative
 {
@@ -14,7 +14,7 @@ namespace DotNetNative
         template <typename T>
         class Array
             : public Object
-            , public IReadOnlyList<T>
+            , public Collections::IReadOnlyList<T>
         {
         private:
             unique_ptr<T[]> m_array;
@@ -44,7 +44,7 @@ namespace DotNetNative
             //
             // Returns:
             //     An enumerator that can be used to iterate through the collection.
-            virtual unique_ptr<IEnumerator<T>> GetEnumerator() override;
+            virtual unique_ptr<Collections::IEnumerator<T>> GetEnumerator() override;
 
             static void Copy(T *destination, const T *source, const size_t count);
         };
@@ -57,7 +57,7 @@ namespace DotNetNative
         {
             if(length < 0)
             {
-                throw ArgumentOutOfRangeException();
+                throw ArgumentOutOfRangeException("length");
             }
 
             if(length > 0)
@@ -72,12 +72,12 @@ namespace DotNetNative
         {
             if(length < 0)
             {
-                throw ArgumentOutOfRangeException();
+                throw ArgumentOutOfRangeException("length");
             }
 
             if(!arr)
             {
-                throw ArgumentNullException();
+                throw ArgumentNullException("arr");
             }
 
             if(m_length > 0)
@@ -146,7 +146,7 @@ namespace DotNetNative
         {
             if(index < 0 || index >= m_length)
             {
-                throw IndexOutOfRangeException();
+                throw IndexOutOfRangeException("index");
             }
 
             return m_array.get()[index];
@@ -157,7 +157,7 @@ namespace DotNetNative
         {
             if(index < 0 || index >= m_length)
             {
-                throw IndexOutOfRangeException();
+                throw IndexOutOfRangeException("index");
             }
 
             return m_array.get()[index];
@@ -197,7 +197,7 @@ namespace DotNetNative
         }
 
         template <typename T>
-        unique_ptr<IEnumerator<T>> Array<T>::GetEnumerator()
+        unique_ptr<Collections::IEnumerator<T>> Array<T>::GetEnumerator()
         {
             static int cookie = 0;
 

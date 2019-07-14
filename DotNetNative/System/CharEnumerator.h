@@ -3,7 +3,7 @@
 
 #include "../MemoryUtil.h"
 #include "Object.h"
-#include "IEnumerator.h"
+#include "Collections/IEnumerator.h"
 #include "Char.h"
 
 namespace DotNetNative
@@ -12,7 +12,7 @@ namespace DotNetNative
     {
         class CharEnumerator
             : public Object
-            , public IEnumerator<utf16char>
+            , public Collections::IEnumerator<utf16char>
         {
         private:
             shared_ptr<utf16char[]> m_chars;

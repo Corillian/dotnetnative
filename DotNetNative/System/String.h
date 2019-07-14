@@ -2,7 +2,7 @@
 #define _DOTNETNATIVE_SYSTEM_STRING_H_
 
 #include "Char.h"
-#include "IEnumerable.h"
+#include "Collections/IEnumerable.h"
 #include "Exception.h"
 
 namespace DotNetNative
@@ -11,7 +11,7 @@ namespace DotNetNative
     {
         class String
             : public Object
-            , public IEnumerable<utf16char>
+            , public Collections::IEnumerable<utf16char>
         {
             friend class StringBuilder;
         private:
@@ -49,7 +49,7 @@ namespace DotNetNative
             //
             // Returns:
             //     An enumerator that can be used to iterate through the collection.
-            virtual unique_ptr<IEnumerator<utf16char>> GetEnumerator() override;
+            virtual unique_ptr<Collections::IEnumerator<utf16char>> GetEnumerator() override;
 
             inline int Length() const noexcept { return m_length; }
 

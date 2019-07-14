@@ -2,6 +2,7 @@
 #define _DOTNETNATIVE_SYSTEM_COLLECTIONS_IDICTIONARY_H_
 
 #include "IReadOnlyDictionary.h"
+#include "ICollection.h"
 
 namespace DotNetNative
 {
@@ -11,7 +12,8 @@ namespace DotNetNative
         {
             template <typename TKey, typename TValue>
             class IDictionary
-                : public IReadOnlyDictionary<KeyValuePair<TKey, TValue>>
+                : public virtual IReadOnlyDictionary<TKey, TValue>
+                , public virtual ICollection<KeyValuePair<TKey, TValue>>
             {
             protected:
                 IDictionary() = default;

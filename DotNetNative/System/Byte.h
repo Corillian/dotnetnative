@@ -1,7 +1,7 @@
 #ifndef _DOTNETNATIVE_SYSTEM_BYTE_H_
 #define _DOTNETNATIVE_SYSTEM_BYTE_H_
 
-#include "IEquitable.h"
+#include "IEquatable.h"
 #include "IComparable.h"
 #include "Object.h"
 #include "Globalization/NumberStyles.h"
@@ -16,7 +16,7 @@ namespace DotNetNative
         class Byte
             : public Object
             , public IComparable<Byte>
-            , public IEquitable<Byte>
+            , public IEquatable<Byte>
         {
         private:
             uint8_t m_byte;

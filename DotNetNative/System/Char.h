@@ -2,7 +2,7 @@
 #define _DOTNETNATIVE_SYSTEM_CHAR_H_
 
 #include "../GlobalDefs.h"
-#include "IEquitable.h"
+#include "IEquatable.h"
 #include "IComparable.h"
 #include "UnicodeCategory.h"
 #include "Object.h"
@@ -14,7 +14,7 @@ namespace DotNetNative
         class Char
             : public Object
             , public IComparable<Char>
-            , public IEquitable<Char>
+            , public IEquatable<Char>
         {
         public:
             static constexpr utf16char MaxValue = 0xFFFF;

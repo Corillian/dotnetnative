@@ -219,9 +219,9 @@ namespace DotNetNative
             return m_string.get()[index];
         }
 
-        unique_ptr<IEnumerator<utf16char>> String::GetEnumerator()
+        unique_ptr<Collections::IEnumerator<utf16char>> String::GetEnumerator()
         {
-            return unique_ptr<IEnumerator<utf16char>>(DNN_New CharEnumerator(m_string, m_length));
+            return unique_ptr<Collections::IEnumerator<utf16char>>(DNN_New CharEnumerator(m_string, m_length));
         }
 
         bool String::Equals(const String &obj) const noexcept
