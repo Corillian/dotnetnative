@@ -17,16 +17,16 @@ namespace DotNetNative
             , public Collections::IReadOnlyList<T>
         {
         private:
-            unique_ptr<T[]> m_array;
-            int64_t         m_length;
+            T       *m_array;
+            int64_t  m_length;
 
         public:
-            Array() : m_length(0) {}
+            Array() : m_array(nullptr), m_length(0) {}
             Array(const int64_t length);
             Array(const T *arr, const int64_t length);
             Array(const Array<T> &copy);
             Array(Array<T> &&mov) noexcept;
-            virtual ~Array() {}
+            virtual ~Array();
 
             Array<T>& operator=(const Array<T> &copy);
             Array<T>& operator=(Array<T> &&mov) noexcept;
@@ -53,7 +53,8 @@ namespace DotNetNative
 
         template <typename T>
         Array<T>::Array(const int64_t length)
-            : m_length(length)
+            : m_array(nullptr)
+            , m_length(length)
         {
             if(length < 0)
             {
@@ -62,13 +63,26 @@ namespace DotNetNative
 
             if(length > 0)
             {
-                m_array = make_unique<T[]>(length);
+                if(std::is_trivially_constructible<T>::value)
+                {
+                    m_array = reinterpret_cast<T*>(DNN_CAlloc(sizeof(T) * length));
+                }
+                else
+                {
+                    m_array = reinterpret_cast<T*>(DNN_Alloc(sizeof(T) * length));
+
+                    for(int64_t i = 0; i < length; ++i)
+                    {
+                        new (m_array + i) T();
+                    }
+                }
             }
         }
 
         template <typename T>
         Array<T>::Array(const T *arr, const int64_t length)
-            : m_length(length)
+            : m_array(nullptr)
+            , m_length(length)
         {
             if(length < 0)
             {
@@ -82,7 +96,19 @@ namespace DotNetNative
 
             if(m_length > 0)
             {
-                m_array = make_unique<T[]>(m_length);
+                if(std::is_trivially_constructible<T>::value)
+                {
+                    m_array = reinterpret_cast<T*>(DNN_CAlloc(sizeof(T) * length));
+                }
+                else
+                {
+                    m_array = reinterpret_cast<T*>(DNN_Alloc(sizeof(T) * length));
+
+                    for(int64_t i = 0; i < length; ++i)
+                    {
+                        new (m_array + i) T();
+                    }
+                }
 
                 Copy(m_array.get(), arr, m_length);
             }
@@ -94,7 +120,19 @@ namespace DotNetNative
         {
             if(length > 0)
             {
-                m_array = make_unique<T[]>(m_length);
+                if(std::is_trivially_constructible<T>::value)
+                {
+                    m_array = reinterpret_cast<T*>(DNN_CAlloc(sizeof(T) * length));
+                }
+                else
+                {
+                    m_array = reinterpret_cast<T*>(DNN_Alloc(sizeof(T) * length));
+
+                    for(int64_t i = 0; i < length; ++i)
+                    {
+                        new (m_array + i) T();
+                    }
+                }
 
                 Copy(m_array.get(), copy.m_array.get(), length);
             }
@@ -102,10 +140,31 @@ namespace DotNetNative
 
         template <typename T>
         Array<T>::Array(Array<T> &&mov) noexcept
-            : m_array(std::move(mov.m_array))
+            : m_array(mov.m_array)
             , m_length(mov.m_length)
         {
+            mov.m_array = nullptr;
             mov.m_length = 0;
+        }
+
+        template <typename T>
+        Array<T>::~Array()
+        {
+            if(m_array)
+            {
+                if(!std::is_trivially_destructible<T>::value)
+                {
+                    for(int64_t i = 0; i < m_length; ++i)
+                    {
+                        (m_array + i)->~T();
+                    }
+                }
+
+                DNN_Free(m_array);
+                m_array = nullptr;
+            }
+
+            m_length = 0;
         }
 
         template <typename T>
@@ -113,14 +172,46 @@ namespace DotNetNative
         {
             if(this != &copy)
             {
-                m_array.reset();
-                m_length = copy.m_length;
-
-                if(m_length > 0)
+                if(copy.m_length == m_length)
                 {
-                    m_array = make_unique<T[]>(m_length);
+                    Copy(m_array, copy.m_array, m_length);
+                }
+                else
+                {
+                    if(m_array)
+                    {
+                        if(!std::is_trivially_destructible<T>::value)
+                        {
+                            for(int64_t i = 0; i < m_length; ++i)
+                            {
+                                (m_array + i)->~T();
+                            }
+                        }
 
-                    Copy(m_array.get(), copy.m_array.get(), length);
+                        DNN_Free(m_array);
+                        m_array = nullptr;
+                    }
+
+                    m_length = copy.m_length;
+
+                    if(m_length > 0)
+                    {
+                        if(std::is_trivially_constructible<T>::value)
+                        {
+                            m_array = reinterpret_cast<T*>(DNN_CAlloc(sizeof(T) * length));
+                        }
+                        else
+                        {
+                            m_array = reinterpret_cast<T*>(DNN_Alloc(sizeof(T) * length));
+
+                            for(int64_t i = 0; i < length; ++i)
+                            {
+                                new (m_array + i) T();
+                            }
+                        }
+
+                        Copy(m_array, copy.m_array, m_length);
+                    }
                 }
             }
 
@@ -132,9 +223,10 @@ namespace DotNetNative
         {
             if(this != &mov)
             {
-                m_array = std::move(mov.m_array);
+                m_array = mov.m_array;
                 m_length = mov.m_length;
 
+                mov.m_array = nullptr;
                 mov.m_length = 0;
             }
 
@@ -149,7 +241,7 @@ namespace DotNetNative
                 throw IndexOutOfRangeException("index");
             }
 
-            return m_array.get()[index];
+            return m_array[index];
         }
 
         template <typename T>
@@ -160,7 +252,7 @@ namespace DotNetNative
                 throw IndexOutOfRangeException("index");
             }
 
-            return m_array.get()[index];
+            return m_array[index];
         }
 
         template <typename T>
@@ -201,7 +293,7 @@ namespace DotNetNative
         {
             static int cookie = 0;
 
-            return unique_ptr<IEnumerator<T>>(DNN_New GenericEnumerator<T>(m_string, m_length, &cookie));
+            return unique_ptr<Collections::IEnumerator<T>>(DNN_New Collections::GenericEnumerator<T>(m_array, m_length, &cookie));
         }
     }
 }

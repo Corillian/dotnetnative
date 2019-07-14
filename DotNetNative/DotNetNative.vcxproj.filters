@@ -116,6 +116,12 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="xxhash.h" />
+    <ClInclude Include="System\Collections\HashHelpers.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Int32.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp" />
@@ -154,5 +160,11 @@
       <Filter>System\Collections</Filter>
     </ClCompile>
     <ClCompile Include="xxhash.cpp" />
+    <ClCompile Include="System\Collections\HashHelpers.cpp">
+      <Filter>System\Collections</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Int32.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

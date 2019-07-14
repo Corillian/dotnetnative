@@ -166,6 +166,17 @@ namespace DotNetNative
         }
     };
 
+    template <typename T>
+    struct FreeDeleter
+    {
+        void operator()(T *memory) const noexcept
+        {
+            static_assert(std::is_trivial<T>::value, "can't free a non-trivial type");
+
+            DNN_Free(memory);
+        }
+    };
+
     /////////////////////////////////////////////////////// Util Functions ///////////////////////////////////////////////////////
 
     template <typename T>
