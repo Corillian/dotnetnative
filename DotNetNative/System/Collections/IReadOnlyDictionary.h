@@ -24,12 +24,12 @@ namespace DotNetNative
                 virtual ~IReadOnlyDictionary() {}
 
                 virtual bool ContainsKey(const TKey &key) const = 0;
-                virtual bool TryGetValue(const TKey &key, TValue &outValue) const = 0;
+                virtual bool TryGetValue(const TKey &key, const TValue **outValue) const = 0;
 
                 virtual const TValue& operator[](const TKey &key) const = 0;
 
-                virtual unique_ptr<IEnumerable<TKey>> Keys() const = 0;
-                virtual unique_ptr<IEnumerable<TValue>> Values() const = 0;
+                virtual unique_ptr<IReadOnlyCollection<TKey>> Keys() const = 0;
+                virtual unique_ptr<IReadOnlyCollection<TValue>> Values() const = 0;
             };
         }
     }

@@ -46,7 +46,9 @@ namespace DotNetNative
             //     An enumerator that can be used to iterate through the collection.
             virtual unique_ptr<Collections::IEnumerator<T>> GetEnumerator() override;
 
-            static void Copy(T *destination, const T *source, const size_t count);
+            static void Copy(const T *source, T *destination, const size_t count);
+            static void Copy(const Array<T> &source, const size_t sourceIndex, Array<T> &destination, const size_t destinationIndex, const size_t count);
+            static void Clear(Array<T> &arr, const size_t index, const size_t count);
         };
 
         //////////////////////////////////////////////////////// Array ////////////////////////////////////////////////////////
@@ -110,7 +112,7 @@ namespace DotNetNative
                     }
                 }
 
-                Copy(m_array.get(), arr, m_length);
+                Copy(arr, m_array.get(), m_length);
             }
         }
 
@@ -134,7 +136,7 @@ namespace DotNetNative
                     }
                 }
 
-                Copy(m_array.get(), copy.m_array.get(), length);
+                Copy(copy.m_array.get(), m_array.get(), length);
             }
         }
 
@@ -174,7 +176,7 @@ namespace DotNetNative
             {
                 if(copy.m_length == m_length)
                 {
-                    Copy(m_array, copy.m_array, m_length);
+                    Copy(copy.m_array, m_array, m_length);
                 }
                 else
                 {
@@ -210,7 +212,7 @@ namespace DotNetNative
                             }
                         }
 
-                        Copy(m_array, copy.m_array, m_length);
+                        Copy(copy.m_array, m_array, m_length);
                     }
                 }
             }
@@ -256,7 +258,7 @@ namespace DotNetNative
         }
 
         template <typename T>
-        void Array<T>::Copy(T *destination, const T *source, const size_t count)
+        void Array<T>::Copy(const T *source, T *destination, const size_t count)
         {
             if(count < 0)
             {
@@ -281,9 +283,45 @@ namespace DotNetNative
             }
             else
             {
-                for(int64_t i = 0; i < length; ++i)
+                for(size_t i = 0; i < count; ++i)
                 {
                     destination[i] = source[i];
+                }
+            }
+        }
+
+        template <typename T>
+        void Array<T>::Copy(const Array<T> &source, const size_t sourceIndex, Array<T> &destination, const size_t destinationIndex, const size_t count)
+        {
+            if(sourceIndex + count > source.Length())
+            {
+                throw ArgumentOutOfRangeException("sourceIndex + count > source.Length()");
+            }
+
+            if(destinationIndex + count > destination.Length())
+            {
+                throw ArgumentOutOfRangeException("destinationIndex + count > destination.Length()");
+            }
+
+            if(count == 0)
+            {
+                return;
+            }
+
+            if(std::is_trivially_copyable<T>::value)
+            {
+                const size_t size = sizeof(T) * count;
+
+                memcpy_s(destination.m_array + destinationIndex, size, source.m_array + sourceIndex, size);
+            }
+            else
+            {
+                T *destPtr = destination.m_array + destinationIndex;
+                const T *srcPtr = source.m_array + sourceIndex;
+
+                for(size_t i = 0; i < count; ++i)
+                {
+                    destPtr[i] = srcPtr[i];
                 }
             }
         }
@@ -294,6 +332,30 @@ namespace DotNetNative
             static int cookie = 0;
 
             return unique_ptr<Collections::IEnumerator<T>>(DNN_New Collections::GenericEnumerator<T>(m_array, m_length, &cookie));
+        }
+
+        template <typename T>
+        void Array<T>::Clear(Array<T> &arr, const size_t index, const size_t count)
+        {
+            if(index + count > arr.Length())
+            {
+                throw ArgumentOutOfRangeException("index + count > arr.Length()");
+            }
+
+            if(std::is_trivially_destructible<T>::value && std::is_trivially_constructible<T>::value)
+            {
+                memset(arr.m_array, 0, sizeof(T) * arr.Length());
+            }
+            else
+            {
+                for(size_t i = 0; i < arr.Length(); ++i)
+                {
+                    T *elem = arr.m_array + i;
+
+                    elem->~T();
+                    new (elem) T();
+                }
+            }
         }
     }
 }

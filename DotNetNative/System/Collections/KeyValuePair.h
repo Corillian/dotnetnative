@@ -20,11 +20,12 @@ namespace DotNetNative
                 TValue m_value;
 
             public:
+                inline KeyValuePair() {}
                 inline KeyValuePair(const TKey &key, const TValue &value) : m_key(key), m_value(value) {}
                 KeyValuePair(TKey &&key, TValue &&value) : m_key(std::move(key)), m_value(std::move(value)) {}
                 KeyValuePair(const KeyValuePair<TKey, TValue> &pair) = default;
                 KeyValuePair(KeyValuePair<TKey, TValue> &&pair) noexcept = default;
-                virtual ~IReadOnlyCollection() {}
+                virtual ~KeyValuePair() {}
 
                 KeyValuePair<TKey, TValue>& operator=(const KeyValuePair<TKey, TValue> &pair) = default;
                 KeyValuePair<TKey, TValue>& operator=(KeyValuePair<TKey, TValue> &&pair) noexcept = default;

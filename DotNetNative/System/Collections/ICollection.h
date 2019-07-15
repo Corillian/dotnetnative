@@ -38,7 +38,7 @@ namespace DotNetNative
                 // CopyTo copies a collection into an Array, starting at a particular
                 // index into the array.
                 // 
-                virtual void CopyTo(Array<T> &arr, const int arrayIndex) = 0;
+                virtual void CopyTo(Array<T> &arr, const int arrayIndex) const = 0;
 
                 virtual bool Remove(const T &item) = 0;
             };

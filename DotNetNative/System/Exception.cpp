@@ -79,5 +79,12 @@ namespace DotNetNative
             : SystemException(message)
         {
         }
+
+        ///////////////////////////////////////////////////// KeyNotFoundException /////////////////////////////////////////////////////
+
+        KeyNotFoundException::KeyNotFoundException(const char *message)
+            : SystemException(message)
+        {
+        }
     }
 }

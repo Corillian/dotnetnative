@@ -84,6 +84,13 @@ namespace DotNetNative
             FormatException() noexcept {}
             FormatException(const char *message);
         };
+
+        class KeyNotFoundException : public SystemException
+        {
+        public:
+            KeyNotFoundException() noexcept {}
+            KeyNotFoundException(const char *message);
+        };
     }
 }
 

@@ -87,7 +87,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<int8_t*> &other) const noexcept { return true; }
-                virtual bool Equals(int8_t *const &x, int8_t *const &y) const noexcept override { return x == y || (x && y && *x == *y); }
+                virtual bool Equals(int8_t *const &x, int8_t *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(int8_t *const &obj) const override { return static_cast<int>(HashTrivialObject32<int8_t*>(obj)); }
             };
 
@@ -117,7 +117,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<uint8_t*> &other) const noexcept { return true; }
-                virtual bool Equals(uint8_t *const &x, uint8_t *const &y) const noexcept override { return x == y || (x && y && *x == *y); }
+                virtual bool Equals(uint8_t *const &x, uint8_t *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(uint8_t *const &obj) const override { return static_cast<int>(HashTrivialObject32<uint8_t*>(obj)); }
             };
 
@@ -147,7 +147,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<int16_t*> &other) const noexcept { return true; }
-                virtual bool Equals(int16_t *const &x, int16_t *const &y) const noexcept override { return x == y || (x && y && *x == *y); }
+                virtual bool Equals(int16_t *const &x, int16_t *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(int16_t *const &obj) const override { return static_cast<int>(HashTrivialObject32<int16_t*>(obj)); }
             };
 
@@ -177,7 +177,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<uint16_t*> &other) const noexcept { return true; }
-                virtual bool Equals(uint16_t *const &x, uint16_t *const &y) const noexcept override { return x == y || (x && y && *x == *y); }
+                virtual bool Equals(uint16_t *const &x, uint16_t *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(uint16_t *const &obj) const override { return static_cast<int>(HashTrivialObject32<uint16_t*>(obj)); }
             };
 
@@ -207,7 +207,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<int*> &other) const noexcept { return true; }
-                virtual bool Equals(int *const &x, int *const &y) const noexcept override { return x == y || (x && y && *x == *y); }
+                virtual bool Equals(int *const &x, int *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(int *const &obj) const override { return static_cast<int>(HashTrivialObject32<int*>(obj)); }
             };
 
@@ -237,7 +237,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<uint32_t*> &other) const noexcept { return true; }
-                virtual bool Equals(uint32_t *const &x, uint32_t *const &y) const noexcept override { return x == y || (x && y && *x == *y); }
+                virtual bool Equals(uint32_t *const &x, uint32_t *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(uint32_t *const &obj) const override { return static_cast<int>(HashTrivialObject32<uint32_t*>(obj)); }
             };
 
@@ -267,7 +267,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<long long*> &other) const noexcept { return true; }
-                virtual bool Equals(long long *const &x, long long *const &y) const noexcept override { return x == y || (x && y && *x == *y); }
+                virtual bool Equals(long long *const &x, long long *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(long long *const &obj) const override { return static_cast<int>(HashTrivialObject32<long long*>(obj)); }
             };
 
@@ -297,7 +297,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<uint64_t*> &other) const noexcept { return true; }
-                virtual bool Equals(uint64_t *const &x, uint64_t *const &y) const noexcept override { return x == y || (x && y && *x == *y); }
+                virtual bool Equals(uint64_t *const &x, uint64_t *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(uint64_t *const &obj) const override { return static_cast<int>(HashTrivialObject32<uint64_t*>(obj)); }
             };
 
@@ -327,7 +327,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<float*> &other) const noexcept { return true; }
-                virtual bool Equals(float *const &x, float *const &y) const noexcept override { return x == y || (x && y && std::abs(*x - *y) <= FLT_EPSILON); }
+                virtual bool Equals(float *const &x, float *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(float *const &obj) const override { return static_cast<int>(HashTrivialObject32<float*>(obj)); }
             };
 
@@ -357,7 +357,7 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<double*> &other) const noexcept { return true; }
-                virtual bool Equals(double *const &x, double *const &y) const noexcept override { return x == y || (x && y && std::abs(*x - *y) <= DBL_EPSILON); }
+                virtual bool Equals(double *const &x, double *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(double *const &obj) const override { return static_cast<int>(HashTrivialObject32<double*>(obj)); }
             };
 
@@ -387,8 +387,23 @@ namespace DotNetNative
                 virtual ~GenericEqualityComparer() {}
 
                 constexpr bool Equals(const GenericEqualityComparer<bool*> &other) const noexcept { return true; }
-                virtual bool Equals(bool *const &x, bool *const &y) const noexcept override { return x == y || (x && y && *x == *y); }
+                virtual bool Equals(bool *const &x, bool *const &y) const noexcept override { return x == y; }
                 virtual int GetHashCode(bool *const &obj) const override { return static_cast<int>(HashTrivialObject32<bool*>(obj)); }
+            };
+
+            template <>
+            class GenericEqualityComparer<void*>
+                : public virtual EqualityComparer<void*>
+            {
+            public:
+                GenericEqualityComparer() = default;
+                GenericEqualityComparer(const GenericEqualityComparer<void*> &copy) = default;
+                GenericEqualityComparer(GenericEqualityComparer<void*> &&mov) noexcept = default;
+                virtual ~GenericEqualityComparer() {}
+
+                constexpr bool Equals(const GenericEqualityComparer<void*> &other) const noexcept { return true; }
+                virtual bool Equals(void *const &x, void *const &y) const noexcept override { return x == y; }
+                virtual int GetHashCode(void *const &obj) const override { return static_cast<int>(HashTrivialObject32<void*>(obj)); }
             };
 
             /////////////////////////////////////////// GenericEqualityComparer ///////////////////////////////////////////
