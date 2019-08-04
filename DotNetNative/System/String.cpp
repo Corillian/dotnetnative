@@ -249,6 +249,27 @@ namespace DotNetNative
             return *this;
         }
 
+        bool String::IsNullOrEmpty(const String &str)
+        {
+            return 0u >= static_cast<unsigned int>(str.Length());
+        }
+
+        bool String::IsNullOrWhiteSpace(const String &str)
+        {
+            // avoid the bounds checking for each iteration
+            const utf16char *strPtr = str;
+
+            for(int i = 0; i < str.Length(); ++i)
+            {
+                if(!Char::IsWhiteSpace(strPtr[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         bool operator==(const String &str1, const String &str2)
         {
             return str1.Equals(str2);

@@ -53,6 +53,9 @@ namespace DotNetNative
 
             inline int Length() const noexcept { return m_length; }
 
+            static bool IsNullOrEmpty(const String &str);
+            static bool IsNullOrWhiteSpace(const String &str);
+
             friend bool operator==(const String &str1, const char *str2);
             friend bool operator==(const String &str1, const utf16char *str2);
         };
