@@ -15,7 +15,7 @@ namespace DotNetNative
             {
             protected:
                 IReadOnlyCollection() = default;
-                IReadOnlyCollectionCollection(const IReadOnlyCollection<T> &copy) = default;
+                IReadOnlyCollection(const IReadOnlyCollection<T> &copy) = default;
                 IReadOnlyCollection(IReadOnlyCollection<T> &&mov) noexcept = default;
 
             public:

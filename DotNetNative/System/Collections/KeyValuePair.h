@@ -33,7 +33,8 @@ namespace DotNetNative
                 virtual String ToString() override;
 
                 inline const TKey& Key() const noexcept { return m_key; }
-                inline TValue& Value() { return m_value; } 
+                inline TValue& Value() noexcept { return m_value; } 
+                inline const TValue& Value() const noexcept { return m_value; }
             };
 
             //////////////////////////////////////////////// KeyValuePair ////////////////////////////////////////////////

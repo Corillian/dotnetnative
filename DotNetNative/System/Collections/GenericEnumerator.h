@@ -166,7 +166,7 @@ namespace DotNetNative
                     throw InvalidOperationException("The collection has been modified.");
                 }
 
-                return m_elements[index];
+                return m_elements[m_index];
             }
 
             //
@@ -193,7 +193,7 @@ namespace DotNetNative
                     throw InvalidOperationException("The collection has been modified.");
                 }
 
-                return m_elements[index];
+                return m_elements[m_index];
             }
 
             //

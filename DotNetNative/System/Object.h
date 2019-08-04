@@ -24,18 +24,6 @@ namespace DotNetNative
             template <typename T>
             static int GetHashCode(const T &obj);
         };
-
-        template <typename T>
-        String Object::ToString(T &obj)
-        {
-            throw NotImplementedException();
-        }
-
-        template <typename T>
-        int Object::GetHashCode(const T &obj)
-        {
-            return obj.GetHashCode();
-        }
     }
 }
 #endif

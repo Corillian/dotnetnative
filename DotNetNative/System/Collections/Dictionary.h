@@ -59,13 +59,13 @@ namespace DotNetNative
                     , public IEnumerator<KeyValuePair<TKey, TValue>>
                 {
                 private:
-                    Dictionary<TKey, TValue> *m_dictionary;
-                    m_currentValue           *m_currentValue;
-                    int                       m_index;
-                    int                       m_cookie;
+                    const Dictionary<TKey, TValue>  *m_dictionary;
+                    Dictionary<TKey, TValue>::Entry *m_currentValue;
+                    int                              m_index;
+                    int                              m_cookie;
 
                 public:
-                    KeyValuePairEnumerator(Dictionary<TKey, TValue> *dictionary);
+                    KeyValuePairEnumerator(const Dictionary<TKey, TValue> *dictionary);
 
                     virtual const KeyValuePair<TKey, TValue>& Current() const & override;
                     virtual KeyValuePair<TKey, TValue>& Current() & override;
@@ -83,10 +83,10 @@ namespace DotNetNative
                     KeyValuePairEnumerator m_enumerator;
 
                 public:
-                    KeyEnumerator(Dictionary<TKey, TValue> *dictionary) : m_enumerator(dictionary) {}
+                    KeyEnumerator(const Dictionary<TKey, TValue> *dictionary) : m_enumerator(dictionary) {}
 
-                    virtual const TKey& Current() const & override { return m_enumerator.Current().Key() }
-                    virtual TKey& Current() & override { return m_enumerator.Current().Key() }
+                    virtual const TKey& Current() const & override { return m_enumerator.Current().Key(); }
+                    virtual TKey& Current() & override { throw NotSupportedException(); }
                     virtual bool MoveNext() override { return m_enumerator.MoveNext(); }
                     virtual void Reset() override { m_enumerator.Reset(); }
 
@@ -101,10 +101,10 @@ namespace DotNetNative
                     KeyValuePairEnumerator m_enumerator;
 
                 public:
-                    ValueEnumerator(Dictionary<TKey, TValue> *dictionary) : m_enumerator(dictionary) {}
+                    ValueEnumerator(const Dictionary<TKey, TValue> *dictionary) : m_enumerator(dictionary) {}
 
-                    virtual const TValue& Current() const & override { return m_enumerator.Current().Value() }
-                    virtual TValue& Current() & override { return m_enumerator.Current().Value() }
+                    virtual const TValue& Current() const & override { return m_enumerator.Current().Value(); }
+                    virtual TValue& Current() & override { return m_enumerator.Current().Value(); }
                     virtual bool MoveNext() override { return m_enumerator.MoveNext(); }
                     virtual void Reset() override { m_enumerator.Reset(); }
 
@@ -116,10 +116,10 @@ namespace DotNetNative
                     , public virtual IReadOnlyCollection<TKey>
                 {
                 private:
-                    Dictionary<TKey, TValue> *m_dictionary;
+                    const Dictionary<TKey, TValue> *m_dictionary;
 
                 public:
-                    inline KeyCollection(Dictionary<TKey, TValue> *dictionary) : m_dictionary(dictionary) {}
+                    inline KeyCollection(const Dictionary<TKey, TValue> *dictionary) : m_dictionary(dictionary) {}
                     virtual ~KeyCollection() {}
 
                     virtual String ToString() override { return String("System.Collections.Dictionary`2.KeyCollection"); }
@@ -133,10 +133,10 @@ namespace DotNetNative
                     , public virtual IReadOnlyCollection<TValue>
                 {
                 private:
-                    Dictionary<TKey, TValue> *m_dictionary;
+                    const Dictionary<TKey, TValue> *m_dictionary;
 
                 public:
-                    inline ValueCollection(Dictionary<TKey, TValue> *dictionary) : m_dictionary(dictionary) {}
+                    inline ValueCollection(const Dictionary<TKey, TValue> *dictionary) : m_dictionary(dictionary) {}
                     virtual ~ValueCollection() {}
 
                     virtual String ToString() override { return String("System.Collections.Dictionary`2.ValueCollection"); }
@@ -158,7 +158,7 @@ namespace DotNetNative
 
             private:
                 int Initialize(const int capacity);
-                int FindEntry(const TKey &key) const noexcept;
+                int FindEntry(const TKey &key) const;
                 void Resize();
                 void Resize(const int newSize, const bool forceNewHashCodes);
                 bool TryInsert(const TKey &key, const TValue &value, const InsertionBehavior behavior);
@@ -211,7 +211,7 @@ namespace DotNetNative
                 // 
                 virtual void CopyTo(Array<KeyValuePair<TKey, TValue>> &arr, const int arrayIndex) const override;
 
-                virtual bool Remove(const KeyValuePair<TKey, TValue> &item) override { Remove(item.Key()); }
+                virtual bool Remove(const KeyValuePair<TKey, TValue> &item) override { return Remove(item.Key()); }
 
                 virtual unique_ptr<IEnumerator<KeyValuePair<TKey, TValue>>> GetEnumerator() override;
 
@@ -301,7 +301,7 @@ namespace DotNetNative
             }
 
             template <typename TKey, typename TValue>
-            Dictionary<TKey, TValue>::Dictionary(Dictionary<TKey, TValue> &&mov)
+            Dictionary<TKey, TValue>::Dictionary(Dictionary<TKey, TValue> &&mov) noexcept
                 : m_entries(std::move(mov.m_entries))
                 , m_buckets(std::move(mov.m_buckets))
                 , m_comparer(std::move(mov.m_comparer))
@@ -329,7 +329,7 @@ namespace DotNetNative
             }
 
             template <typename TKey, typename TValue>
-            int Dictionary<TKey, TValue>::FindEntry(const TKey &key) const noexcept
+            int Dictionary<TKey, TValue>::FindEntry(const TKey &key) const
             {
                 int i = -1;
                 Array<int> *buckets = m_buckets.get();
@@ -365,7 +365,7 @@ namespace DotNetNative
                         {
                             // The chain of entries forms a loop; which means a concurrent update has happened.
                             // Break out of the loop and throw, rather than looping forever.
-                            throw InvalidOperationException("Operation not supported.")
+                            throw InvalidOperationException("Operation not supported.");
                         }
 
                         collisionCount++;
@@ -408,7 +408,7 @@ namespace DotNetNative
             template <typename TKey, typename TValue>
             void Dictionary<TKey, TValue>::Resize()
             {
-                Resize(HashHelpers::ExpandPrime(m_count));
+                Resize(HashHelpers::ExpandPrime(m_count), false);
             }
 
             template <typename TKey, typename TValue>
@@ -422,7 +422,7 @@ namespace DotNetNative
                 unique_ptr<Array<int>> bucketsPtr = DNN_make_unique(Array<int>, newSize);
                 unique_ptr<Array<Entry>> entriesPtr = DNN_make_unique(Array<Entry>, newSize);
 
-                Array<Entry>::Copy(m_entries, 0, entriesPtr, 0, m_count);
+                Array<Entry>::Copy(*m_entries, 0, *entriesPtr, 0, m_count);
 
                 Array<Entry> &entries = *entriesPtr;
                 Array<int> &buckets = *bucketsPtr;
@@ -484,7 +484,7 @@ namespace DotNetNative
                 {
                     // Should be a while loop https://github.com/dotnet/coreclr/issues/15476
                     // Test uint in if rather than loop condition to drop range check for following array access
-                    if(static_cast<uint32_t>(i) >= static_cast<uint32_t>(m_entries.Length()))
+                    if(static_cast<uint32_t>(i) >= static_cast<uint32_t>(m_entries->Length()))
                     {
                         break;
                     }
@@ -493,7 +493,7 @@ namespace DotNetNative
                     {
                         if(behavior == InsertionBehavior::OverwriteExisting)
                         {
-                            entries[i].value = value;
+                            entries[i].m_pair.Value() = value;
                             ++m_version;
                             return true;
                         }
@@ -596,7 +596,7 @@ namespace DotNetNative
                 {
                     // Should be a while loop https://github.com/dotnet/coreclr/issues/15476
                     // Test uint in if rather than loop condition to drop range check for following array access
-                    if(static_cast<uint32_t>(i) >= static_cast<uint32_t>(m_entries.Length()))
+                    if(static_cast<uint32_t>(i) >= static_cast<uint32_t>(m_entries->Length()))
                     {
                         break;
                     }
@@ -605,7 +605,7 @@ namespace DotNetNative
                     {
                         if(behavior == InsertionBehavior::OverwriteExisting)
                         {
-                            entries[i].value = value;
+                            entries[i].m_pair.Value() = std::move(value);
                             ++m_version;
                             return true;
                         }
@@ -693,7 +693,7 @@ namespace DotNetNative
                     Array<int> &buckets = *m_buckets;
                     Array<Entry> &entries = *m_entries;
                     
-                    const uint32_t hashCode = static_cast<uint>(m_comparer->GetHashCode(key)); // TODO-NULLABLE: Remove ! when [DoesNotReturn] respected
+                    const uint32_t hashCode = static_cast<uint32_t>(m_comparer->GetHashCode(key)); // TODO-NULLABLE: Remove ! when [DoesNotReturn] respected
                     const uint32_t bucket = hashCode % static_cast<uint32_t>(buckets.Length());
                     int last = -1;
 
@@ -704,7 +704,7 @@ namespace DotNetNative
                     {
                         Entry &entry = entries[i];
 
-                        if(entry.m_hashCode == hashCode && m_comparer->Equals(entry.key, key))
+                        if(entry.m_hashCode == hashCode && m_comparer->Equals(entry.m_pair.Key(), key))
                         {
                             if(last < 0)
                             {
@@ -996,12 +996,12 @@ namespace DotNetNative
             template <typename TKey, typename TValue>
             void Dictionary<TKey, TValue>::CopyTo(Array<KeyValuePair<TKey, TValue>> &arr, const int arrayIndex) const
             {
-                if(static_cast<uint32_t>(index) > static_cast<uint>(arr.Length()))
+                if(static_cast<uint32_t>(arrayIndex) > static_cast<uint32_t>(arr.Length()))
                 {
                     throw ArgumentOutOfRangeException("arrayIndex");
                 }
 
-                if(arr.Length() - index < Count())
+                if(arr.Length() - arrayIndex < Count())
                 {
                     throw ArgumentException("The array is too small.");
                 }
@@ -1028,7 +1028,7 @@ namespace DotNetNative
                 
                 if(i >= 0)
                 {
-                    return (*m_entries[i]).m_pair.Value();
+                    return (*m_entries)[i].m_pair.Value();
                 }
 
                 throw KeyNotFoundException();
@@ -1041,7 +1041,7 @@ namespace DotNetNative
 
                 if(i >= 0)
                 {
-                    return (*m_entries[i]).m_pair.Value();
+                    return (*m_entries)[i].m_pair.Value();
                 }
 
                 throw KeyNotFoundException();
@@ -1124,7 +1124,7 @@ namespace DotNetNative
             ///////////////////////////////////////// Dictionary::KeyValuePairEnumerator /////////////////////////////////////////
 
             template <typename TKey, typename TValue>
-            Dictionary<TKey, TValue>::KeyValuePairEnumerator::KeyValuePairEnumerator(Dictionary<TKey, TValue> *dictionary)
+            Dictionary<TKey, TValue>::KeyValuePairEnumerator::KeyValuePairEnumerator(const Dictionary<TKey, TValue> *dictionary)
                 : m_dictionary(dictionary)
                 , m_currentValue(nullptr)
                 , m_index(0)
@@ -1140,12 +1140,12 @@ namespace DotNetNative
                     throw new InvalidOperationException("Enumeration not started.");
                 }
 
-                if(m_cookie != dictionary->m_version)
+                if(m_cookie != m_dictionary->m_version)
                 {
                     throw InvalidOperationException("The collection has been modified.");
                 }
 
-                return *m_currentValue;
+                return m_currentValue->m_pair;
             }
 
             template <typename TKey, typename TValue>
@@ -1156,12 +1156,12 @@ namespace DotNetNative
                     throw new InvalidOperationException("Enumeration not started.");
                 }
 
-                if(m_cookie != *m_collectionModifiedCookie)
+                if(m_cookie != m_dictionary->m_version)
                 {
                     throw InvalidOperationException("The collection has been modified.");
                 }
 
-                return *m_currentValue;
+                return m_currentValue->m_pair;
             }
 
             template <typename TKey, typename TValue>
@@ -1182,7 +1182,7 @@ namespace DotNetNative
                     }
                 }
 
-                m_index = m_dictionary.m_count + 1;
+                m_index = m_dictionary->m_count + 1;
                 m_currentValue = nullptr;
 
                 return false;

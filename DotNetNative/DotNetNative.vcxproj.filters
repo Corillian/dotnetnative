@@ -122,6 +122,9 @@
     <ClInclude Include="System\Int32.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="System\ObjectImpl.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp" />

@@ -2,7 +2,7 @@
 #define _DOTNETNATIVE_SYSTEM_ARRAY_H_
 
 #include "../MemoryUtil.h"
-#include "Object.h"
+#include "ObjectImpl.h"
 #include "Exception.h"
 #include "Collections/IReadOnlyList.h"
 #include "Collections/GenericEnumerator.h"
@@ -36,7 +36,7 @@ namespace DotNetNative
 
             virtual int64_t Count() const override { return m_length; }
             inline int64_t Length() const noexcept { return m_length; }
-            inline T* operator T*() const noexcept { return m_array.get(); }
+            inline operator T*() const noexcept { return m_array.get(); }
 
             //
             // Summary:
@@ -67,7 +67,7 @@ namespace DotNetNative
             {
                 if(std::is_trivially_constructible<T>::value)
                 {
-                    m_array = reinterpret_cast<T*>(DNN_CAlloc(sizeof(T) * length));
+                    m_array = reinterpret_cast<T*>(DNN_CAlloc(length, sizeof(T)));
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace DotNetNative
             {
                 if(std::is_trivially_constructible<T>::value)
                 {
-                    m_array = reinterpret_cast<T*>(DNN_CAlloc(sizeof(T) * length));
+                    m_array = reinterpret_cast<T*>(DNN_CAlloc(length, sizeof(T)));
                 }
                 else
                 {
@@ -124,7 +124,7 @@ namespace DotNetNative
             {
                 if(std::is_trivially_constructible<T>::value)
                 {
-                    m_array = reinterpret_cast<T*>(DNN_CAlloc(sizeof(T) * length));
+                    m_array = reinterpret_cast<T*>(DNN_CAlloc(length, sizeof(T)));
                 }
                 else
                 {
@@ -200,7 +200,7 @@ namespace DotNetNative
                     {
                         if(std::is_trivially_constructible<T>::value)
                         {
-                            m_array = reinterpret_cast<T*>(DNN_CAlloc(sizeof(T) * length));
+                            m_array = reinterpret_cast<T*>(DNN_CAlloc(length, sizeof(T)));
                         }
                         else
                         {
@@ -293,12 +293,12 @@ namespace DotNetNative
         template <typename T>
         void Array<T>::Copy(const Array<T> &source, const size_t sourceIndex, Array<T> &destination, const size_t destinationIndex, const size_t count)
         {
-            if(sourceIndex + count > source.Length())
+            if(sourceIndex + count > static_cast<size_t>(source.Length()))
             {
                 throw ArgumentOutOfRangeException("sourceIndex + count > source.Length()");
             }
 
-            if(destinationIndex + count > destination.Length())
+            if(destinationIndex + count > static_cast<size_t>(destination.Length()))
             {
                 throw ArgumentOutOfRangeException("destinationIndex + count > destination.Length()");
             }
@@ -337,20 +337,22 @@ namespace DotNetNative
         template <typename T>
         void Array<T>::Clear(Array<T> &arr, const size_t index, const size_t count)
         {
-            if(index + count > arr.Length())
+            if(index + count > static_cast<size_t>(arr.Length()))
             {
                 throw ArgumentOutOfRangeException("index + count > arr.Length()");
             }
 
             if(std::is_trivially_destructible<T>::value && std::is_trivially_constructible<T>::value)
             {
-                memset(arr.m_array, 0, sizeof(T) * arr.Length());
+                memset(arr.m_array + index, 0, sizeof(T) * arr.Length());
             }
             else
             {
-                for(size_t i = 0; i < arr.Length(); ++i)
+                T *arrOffset = arr.m_array + index;
+
+                for(size_t i = 0; i < count; ++i)
                 {
-                    T *elem = arr.m_array + i;
+                    T *elem = arrOffset + i;
 
                     elem->~T();
                     new (elem) T();

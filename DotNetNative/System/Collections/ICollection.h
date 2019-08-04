@@ -7,11 +7,11 @@ namespace DotNetNative
 {
     namespace System
     {
+        template<typename T>
+        class Array;
+
         namespace Collections
         {
-            template<typename T>
-            class Array;
-
             // Base interface for all collections, defining enumerators, size, and 
             // synchronization methods.
             template <typename T>
