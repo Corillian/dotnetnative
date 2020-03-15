@@ -2,6 +2,7 @@
 #define _DOTNETNATIVE_GLOBALDEFS_H_
 
 #include <cstdint>
+#include <cstddef>
 #include <type_traits>
 
 namespace DotNetNative

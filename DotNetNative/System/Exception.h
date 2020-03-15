@@ -91,6 +91,44 @@ namespace DotNetNative
             KeyNotFoundException() noexcept {}
             KeyNotFoundException(const char *message);
         };
+
+        class OutOfMemoryException : public SystemException
+        {
+        public:
+            OutOfMemoryException() noexcept {}
+            OutOfMemoryException(const char *message);
+        };
+
+        class SecurityException : public SystemException
+        {
+        public:
+            SecurityException() noexcept {}
+            SecurityException(const char *message);
+        };
+
+        class ArithmeticException : public SystemException
+        {
+        public:
+            ArithmeticException() noexcept {}
+            ArithmeticException(const char *message);
+        };
+
+        class OverflowException : public ArithmeticException
+        {
+        public:
+            OverflowException() noexcept {}
+            OverflowException(const char *message);
+        };
+
+        namespace IO
+        {
+            class IOException : public Exception
+            {
+            public:
+                IOException() noexcept {}
+                IOException(const char *message);
+            };
+        }
     }
 }
 

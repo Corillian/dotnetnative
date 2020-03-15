@@ -157,7 +157,7 @@ namespace DotNetNative
     template <typename T>
     struct Deleter<T[]>
     {
-        template <class T2, std::enable_if_t<std::is_convertible_v<T2(*)[], T(*)[]>, int> = 0>
+        template <typename T2, std::enable_if_t<std::is_convertible_v<T2(*)[], T(*)[]>, int> = 0>
         void operator()(T2 *memory) const noexcept
         {
             static_assert(0 < sizeof(T2), "can't delete an incomplete type");

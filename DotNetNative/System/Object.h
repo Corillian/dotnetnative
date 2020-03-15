@@ -23,6 +23,9 @@ namespace DotNetNative
 
             template <typename T>
             static int GetHashCode(const T &obj);
+
+            template <typename T>
+            static bool Equals(const T &x, const T &y);
         };
     }
 }

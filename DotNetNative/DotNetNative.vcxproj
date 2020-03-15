@@ -148,8 +148,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GlobalDefs.h" />
+    <ClInclude Include="Internal\Win32\GlobalWindows.h" />
+    <ClInclude Include="Internal\Win32\Interop.Windows.h" />
+    <ClInclude Include="Internal\Win32\RegistryKey.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="MemoryUtil.h" />
+    <ClInclude Include="System\Action.h" />
     <ClInclude Include="System\Array.h" />
     <ClInclude Include="System\BitConverter.h" />
     <ClInclude Include="System\Buffers\Binary\BinaryPrimitives.h" />
@@ -162,16 +166,21 @@
     <ClInclude Include="System\Collections\GenericEnumerator.h" />
     <ClInclude Include="System\Collections\HashHelpers.h" />
     <ClInclude Include="System\Collections\ICollection.h" />
+    <ClInclude Include="System\Collections\IComparer.h" />
     <ClInclude Include="System\Collections\IDictionary.h" />
     <ClInclude Include="System\Collections\IEnumerable.h" />
     <ClInclude Include="System\Collections\IEnumerator.h" />
     <ClInclude Include="System\Collections\IEqualityComparer.h" />
+    <ClInclude Include="System\Collections\IList.h" />
     <ClInclude Include="System\Collections\IReadOnlyCollection.h" />
     <ClInclude Include="System\Collections\IReadOnlyDictionary.h" />
     <ClInclude Include="System\Collections\IReadOnlyList.h" />
     <ClInclude Include="System\Collections\KeyValuePair.h" />
+    <ClInclude Include="System\Collections\List.h" />
     <ClInclude Include="System\Environment.h" />
     <ClInclude Include="System\Exception.h" />
+    <ClInclude Include="System\Globalization\CultureData.h" />
+    <ClInclude Include="System\Globalization\GlobalizationMode.h" />
     <ClInclude Include="System\Globalization\NumberStyles.h" />
     <ClInclude Include="System\IComparable.h" />
     <ClInclude Include="System\IEquatable.h" />
@@ -185,6 +194,8 @@
     <ClInclude Include="xxhash.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Internal\Win32\Interop.Windows.cpp" />
+    <ClCompile Include="Internal\Win32\RegistryKey.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="MemoryUtil.cpp" />
     <ClCompile Include="System\Byte.cpp" />
@@ -195,6 +206,7 @@
     <ClCompile Include="System\Collections\EqualityComparer.cpp" />
     <ClCompile Include="System\Collections\HashHelpers.cpp" />
     <ClCompile Include="System\Environment.cpp" />
+    <ClCompile Include="System\Environment.Windows.cpp" />
     <ClCompile Include="System\Exception.cpp" />
     <ClCompile Include="System\Int32.cpp" />
     <ClCompile Include="System\Object.cpp" />

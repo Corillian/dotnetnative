@@ -2,6 +2,8 @@
 #define _DOTNETNATIVE_SYSTEM_OBJECTIMPL_H_
 
 #include "String.h"
+#include <cfloat>
+#include <cmath>
 
 namespace DotNetNative
 {
@@ -26,6 +28,7 @@ namespace DotNetNative
             {
                 static String ToString(T &obj) { throw NotImplementedException(); }
                 static int GetHashCode(const T &obj) { throw NotImplementedException(); }
+                static bool Equals(const T &x, const T &y) { throw NotImplementedException(); }
             };
 
             template <>
@@ -33,6 +36,7 @@ namespace DotNetNative
             {
                 static String ToString(Object &obj) { return obj.ToString(); }
                 static int GetHashCode(const Object &obj) { return obj.GetHashCode(); }
+                static bool Equals(const Object &x, const Object &y) { return x.Equals(y); }
             };
 
             template <>
@@ -40,6 +44,7 @@ namespace DotNetNative
             {
                 static String ToString(Object *&obj) { return obj->ToString(); }
                 static int GetHashCode(const Object *&obj) { return obj->GetHashCode(); }
+                constexpr static bool Equals(const Object *&x, const Object *&y) { return x == y; }
             };
 
             template <>
@@ -47,6 +52,7 @@ namespace DotNetNative
             {
                 static String ToString(char &obj) { return String(&obj, 1); }
                 static int GetHashCode(const char &obj) { return static_cast<int>(obj); }
+                constexpr static bool Equals(const char &x, const char &y) { return x == y; }
             };
 
             template <>
@@ -54,6 +60,7 @@ namespace DotNetNative
             {
                 static String ToString(char *&obj) { return String(obj, 1); }
                 static int GetHashCode(const char *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const char *&x, const char *&y) { return x == y; }
             };
 
             template <>
@@ -61,6 +68,7 @@ namespace DotNetNative
             {
                 static String ToString(unsigned char &obj) { throw NotImplementedException(); }
                 static int GetHashCode(const unsigned char &obj) { return static_cast<int>(obj); }
+                constexpr static bool Equals(const unsigned char &x, const unsigned char &y) { return x == y; }
             };
 
             template <>
@@ -77,6 +85,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const unsigned char *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const unsigned char *&x, const unsigned char *&y) { return x == y; }
             };
 
             template <>
@@ -84,6 +93,7 @@ namespace DotNetNative
             {
                 static String ToString(short &obj) { throw NotImplementedException(); }
                 static int GetHashCode(const short &obj) { return static_cast<int>(obj); }
+                constexpr static bool Equals(const short &x, const short &y) { return x == y; }
             };
 
             template <>
@@ -100,6 +110,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const short *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const short *&x, const short *&y) { return x == y; }
             };
 
             template <>
@@ -107,6 +118,7 @@ namespace DotNetNative
             {
                 static String ToString(unsigned short &obj) { throw NotImplementedException(); }
                 static int GetHashCode(const unsigned short &obj) { return static_cast<int>(obj); }
+                constexpr static bool Equals(const unsigned short &x, const unsigned short &y) { return x == y; }
             };
 
             template <>
@@ -123,6 +135,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const unsigned short *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const unsigned short *&x, const unsigned short *&y) { return x == y; }
             };
 
             template <>
@@ -130,6 +143,7 @@ namespace DotNetNative
             {
                 static String ToString(int &obj) { throw NotImplementedException(); }
                 static int GetHashCode(const int &obj) { return obj; }
+                constexpr static bool Equals(const int &x, const int &y) { return x == y; }
             };
 
             template <>
@@ -146,6 +160,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const int *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const int *&x, const int *&y) { return x == y; }
             };
 
             template <>
@@ -153,6 +168,7 @@ namespace DotNetNative
             {
                 static String ToString(unsigned int &obj) { throw NotImplementedException(); }
                 static int GetHashCode(const unsigned int &obj) { return static_cast<int>(obj); }
+                constexpr static bool Equals(const unsigned int &x, const unsigned int &y) { return x == y; }
             };
 
             template <>
@@ -169,6 +185,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const unsigned int *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const unsigned int *&x, const unsigned int *&y) { return x == y; }
             };
 
             template <>
@@ -179,6 +196,8 @@ namespace DotNetNative
                 {
                     return (obj & 0xffffffff) ^ ((obj >> 32) & 0xffffffff);
                 }
+
+                constexpr static bool Equals(const long long &x, const long long &y) { return x == y; }
             };
 
             template <>
@@ -195,6 +214,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const long long *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const long long *&x, const long long *&y) { return x == y; }
             };
 
             template <>
@@ -205,6 +225,8 @@ namespace DotNetNative
                 {
                     return (obj & 0xffffffff) ^ ((obj >> 32) & 0xffffffff);
                 }
+
+                constexpr static bool Equals(const unsigned long long &x, const unsigned long long &y) { return x == y; }
             };
 
             template <>
@@ -221,6 +243,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const unsigned long long *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const unsigned long long *&x, const unsigned long long *&y) { return x == y; }
             };
 
             template <>
@@ -233,6 +256,8 @@ namespace DotNetNative
 
                     return *reinterpret_cast<const int*>(&obj);
                 }
+
+                constexpr static bool Equals(const float &x, const float &y) { return std::abs(x - y) <= FLT_EPSILON; }
             };
 
             template <>
@@ -249,6 +274,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const float *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const float *&x, const float *&y) { return x == y; }
             };
 
             template <>
@@ -259,6 +285,8 @@ namespace DotNetNative
                 {
                     return (*reinterpret_cast<const unsigned long long*>(&obj) & 0xffffffff) ^ ((*reinterpret_cast<const unsigned long long*>(&obj) >> 32) & 0xffffffff);
                 }
+
+                constexpr static bool Equals(const double &x, const double &y) { return std::abs(x - y) <= DBL_EPSILON; }
             };
 
             template <>
@@ -275,6 +303,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const double *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const double *&x, const double *&y) { return x == y; }
             };
 
             template <>
@@ -282,6 +311,7 @@ namespace DotNetNative
             {
                 static String ToString(bool &obj) { return obj ? String("True") : String("False"); }
                 static int GetHashCode(const bool &obj) { return obj; }
+                constexpr static bool Equals(const bool &x, const bool &y) { return x == y; }
             };
 
             template <>
@@ -298,6 +328,7 @@ namespace DotNetNative
                 }
 
                 static int GetHashCode(const bool *&obj) { return PointerToHashCode(obj); }
+                constexpr static bool Equals(const bool *&x, const bool *&y) { return x == y; }
             };
         }
 
@@ -313,6 +344,12 @@ namespace DotNetNative
         int Object::GetHashCode(const T &obj)
         {
             return Internal::ObjectHelper<T>::GetHashCode(obj);
+        }
+
+        template <typename T>
+        bool Object::Equals(const T &x, const T &y)
+        {
+            return Internal::ObjectHelper<T>::Equals(x, y);
         }
     }
 }

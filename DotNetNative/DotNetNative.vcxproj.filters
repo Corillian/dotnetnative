@@ -23,6 +23,12 @@
     <Filter Include="System\Collections">
       <UniqueIdentifier>{83e1b32c-0f68-453a-8415-b1d020f29dc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Internal">
+      <UniqueIdentifier>{cdded2cc-e1d9-48dd-a85b-096c3500923e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Internal\Win32">
+      <UniqueIdentifier>{92e9a6af-1454-46de-adee-fed6ab4df629}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.h" />
@@ -125,6 +131,33 @@
     <ClInclude Include="System\ObjectImpl.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="System\Globalization\CultureData.h">
+      <Filter>System\Globalization</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Globalization\GlobalizationMode.h">
+      <Filter>System\Globalization</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\Win32\Interop.Windows.h">
+      <Filter>Internal\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\Win32\GlobalWindows.h">
+      <Filter>Internal\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\Win32\RegistryKey.h">
+      <Filter>Internal\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Action.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\IList.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\List.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Collections\IComparer.h">
+      <Filter>System\Collections</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory.cpp" />
@@ -168,6 +201,15 @@
     </ClCompile>
     <ClCompile Include="System\Int32.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Environment.Windows.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Internal\Win32\Interop.Windows.cpp">
+      <Filter>Internal\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="Internal\Win32\RegistryKey.cpp">
+      <Filter>Internal\Win32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

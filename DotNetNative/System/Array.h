@@ -36,7 +36,8 @@ namespace DotNetNative
 
             virtual int64_t Count() const override { return m_length; }
             inline int64_t Length() const noexcept { return m_length; }
-            inline operator T*() const noexcept { return m_array.get(); }
+            inline operator const T*() const noexcept { return m_array.get(); }
+            inline operator T*() noexcept { return m_array.get(); }
 
             //
             // Summary:
@@ -46,9 +47,22 @@ namespace DotNetNative
             //     An enumerator that can be used to iterate through the collection.
             virtual unique_ptr<Collections::IEnumerator<T>> GetEnumerator() override;
 
+            // Returns the index of a particular item, if it is in the list.
+            // Returns -1 if the item isn't in the list.
+            inline static int IndexOf(const Array<T> &ar, const T &item) { return IndexOf(ar, item, 0, ar.Length()); }
+            inline static int IndexOf(const Array<T> &ar, const T &item, const int64_t startIndex) { return IndexOf(ar, item, startIndex, ar.Length() - startIndex); }
+            static int64_t IndexOf(const Array<T> &ar, const T &item, const int64_t startIndex, const int64_t count);
+
+            inline static int LastIndexOf(const Array<T> &ar, const T &item) { return LastIndexOf(ar, item, 0, ar.Length()); }
+            inline static int LastIndexOf(const Array<T> &ar, const T &item, const int64_t startIndex) { return LastIndexOf(ar, item, startIndex, ar.Length() - startIndex); }
+            static int64_t LastIndexOf(const Array<T> &ar, const T &item, const int64_t startIndex, const int64_t count);
+
             static void Copy(const T *source, T *destination, const size_t count);
             static void Copy(const Array<T> &source, const size_t sourceIndex, Array<T> &destination, const size_t destinationIndex, const size_t count);
+            static void Move(const T *source, T *destination, const size_t count);
+            static void Move(const Array<T> &source, const size_t sourceIndex, Array<T> &destination, const size_t destinationIndex, const size_t count);
             static void Clear(Array<T> &arr, const size_t index, const size_t count);
+            static void Reverse(Array<T> &arr, const size_t index, const size_t length);
         };
 
         //////////////////////////////////////////////////////// Array ////////////////////////////////////////////////////////
@@ -327,6 +341,75 @@ namespace DotNetNative
         }
 
         template <typename T>
+        void Array<T>::Move(const T *source, T *destination, const size_t count)
+        {
+            if(count < 0)
+            {
+                throw ArgumentOutOfRangeException("count");
+            }
+
+            if(!destination)
+            {
+                throw ArgumentNullException("destination");
+            }
+
+            if(!source)
+            {
+                throw ArgumentNullException("source");
+            }
+
+            if(std::is_trivially_move_assignable<T>::value)
+            {
+                const size_t size = sizeof(T) * count;
+
+                memcpy_s(destination, size, source, size);
+            }
+            else
+            {
+                for(size_t i = 0; i < count; ++i)
+                {
+                    destination[i] = std::move(source[i]);
+                }
+            }
+        }
+
+        template <typename T>
+        void Array<T>::Move(const Array<T> &source, const size_t sourceIndex, Array<T> &destination, const size_t destinationIndex, const size_t count)
+        {
+            if(sourceIndex + count > static_cast<size_t>(source.Length()))
+            {
+                throw ArgumentOutOfRangeException("sourceIndex + count > source.Length()");
+            }
+
+            if(destinationIndex + count > static_cast<size_t>(destination.Length()))
+            {
+                throw ArgumentOutOfRangeException("destinationIndex + count > destination.Length()");
+            }
+
+            if(count == 0)
+            {
+                return;
+            }
+
+            if(std::is_trivially_move_assignable<T>::value)
+            {
+                const size_t size = sizeof(T) * count;
+
+                memcpy_s(destination.m_array + destinationIndex, size, source.m_array + sourceIndex, size);
+            }
+            else
+            {
+                T *destPtr = destination.m_array + destinationIndex;
+                const T *srcPtr = source.m_array + sourceIndex;
+
+                for(size_t i = 0; i < count; ++i)
+                {
+                    destPtr[i] = std::move(srcPtr[i]);
+                }
+            }
+        }
+
+        template <typename T>
         unique_ptr<Collections::IEnumerator<T>> Array<T>::GetEnumerator()
         {
             static int cookie = 0;
@@ -342,11 +425,7 @@ namespace DotNetNative
                 throw ArgumentOutOfRangeException("index + count > arr.Length()");
             }
 
-            if(std::is_trivially_destructible<T>::value && std::is_trivially_constructible<T>::value)
-            {
-                memset(arr.m_array + index, 0, sizeof(T) * arr.Length());
-            }
-            else
+            if(!std::is_trivially_destructible<T>::value)
             {
                 T *arrOffset = arr.m_array + index;
 
@@ -357,6 +436,119 @@ namespace DotNetNative
                     elem->~T();
                     new (elem) T();
                 }
+            }
+        }
+
+        // Returns the index of a particular item, if it is in the list.
+        // Returns -1 if the item isn't in the list.
+        template <typename T>
+        int64_t Array<T>::IndexOf(const Array<T> &ar, const T &item, const int64_t startIndex, const int64_t count)
+        {
+            if(startIndex < 0)
+            {
+                throw IndexOutOfRangeException("startIndex is out of range.");
+            }
+
+            if(startIndex + count > ar.Length())
+            {
+                throw IndexOutOfRangeException("startIndex + count is out of range.");
+            }
+
+            const T *ptr = ar;
+
+            ptr += startIndex;
+
+            for(int64_t i = 0; i < count; ++i)
+            {
+                if(Internal::ObjectHelper<T>::Equals(item, ptr[i]))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        template <typename T>
+        int64_t Array<T>::LastIndexOf(const Array<T> &ar, const T &item, const int64_t startIndex, const int64_t count)
+        {
+            if(startIndex < 0)
+            {
+                throw IndexOutOfRangeException("startIndex is out of range.");
+            }
+
+            if(startIndex + count > ar.Length())
+            {
+                throw IndexOutOfRangeException("startIndex + count is out of range.");
+            }
+
+            const T *ptr = ar;
+
+            ptr += startIndex;
+
+            // To maintain some type of cache coherency without iterating over every element we walk backwards in blocks
+            // of forward searched items
+            constexpr int64_t blockSize = 128;
+
+            int64_t baseIndex = count;
+            int64_t foundIndex = -1;
+            int64_t blockCount;
+
+            do
+            {
+                baseIndex -= blockSize;
+
+                if(baseIndex < 0)
+                {
+                    blockCount = -baseIndex;
+                    baseIndex = 0;
+                }
+                else
+                {
+                    blockCount = blockSize;
+                }
+
+                for(int64_t i = 0; i < blockCount; ++i)
+                {
+                    const int64_t index = baseIndex + i;
+
+                    if(Internal::ObjectHelper<T>::Equals(item, ptr[index]))
+                    {
+                        foundIndex = index + startIndex;
+                    }
+                }
+
+
+            } while(foundIndex == -1 && baseIndex > 0);
+
+            return foundIndex;
+        }
+
+        template <typename T>
+        void Array<T>::Reverse(Array<T> &arr, const size_t index, const size_t length)
+        {
+            if(index + length > arr.Length())
+            {
+                throw ArgumentException("Invalid offset + length.");
+            }
+
+            if(length <= 1)
+            {
+                return;
+            }
+
+            size_t i = index;
+            size_t j = index + length - 1;
+
+            while(i < j)
+            {
+                T temp = std::move(arr.m_array[i]);
+
+                arr.m_array[i] = std::move(arr.m_array[j]);
+                arr.m_array[j] = std::move(temp);
+
+                ++i;
+                --j;
             }
         }
     }

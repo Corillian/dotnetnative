@@ -86,5 +86,44 @@ namespace DotNetNative
             : SystemException(message)
         {
         }
+
+        ///////////////////////////////////////////////////// OutOfMemoryException /////////////////////////////////////////////////////
+
+        OutOfMemoryException::OutOfMemoryException(const char *message)
+            : SystemException(message)
+        {
+        }
+
+        ///////////////////////////////////////////////////// SecurityException /////////////////////////////////////////////////////
+
+        SecurityException::SecurityException(const char *message)
+            : SystemException(message)
+        {
+        }
+
+        ///////////////////////////////////////////////////// ArithmeticException /////////////////////////////////////////////////////
+
+        ArithmeticException::ArithmeticException(const char *message)
+            : SystemException(message)
+        {
+        }
+
+        ///////////////////////////////////////////////////// OverflowException /////////////////////////////////////////////////////
+
+        OverflowException::OverflowException(const char *message)
+            : ArithmeticException(message)
+        {
+        }
+
+        ///////////////////////////////////////////////////// IO /////////////////////////////////////////////////////
+        namespace IO
+        {
+            ///////////////////////////////////////////////////// IOException /////////////////////////////////////////////////////
+
+            IOException::IOException(const char *message)
+                : Exception(message)
+            {
+            }
+        }
     }
 }

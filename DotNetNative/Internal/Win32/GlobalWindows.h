@@ -1,0 +1,14 @@
+#ifndef _DOTNETNATIVE_INTERNAL_WIN32_GLOBALWINDOWS_H_
+#define _DOTNETNATIVE_INTERNAL_WIN32_GLOBALWINDOWS_H_
+
+#if _WIN32
+
+#include <SDKDDKVer.h>
+
+#define WIN32_LEAN_AND_MEAN
+
+#include <Windows.h>
+
+#endif
+
+#endif
